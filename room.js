@@ -4,4 +4,7 @@ class Room {
         this.room_name = room_name;
         this.current_users = null;
     }
+
+    user_leave(){}
+    user_join(){}
 }
