@@ -9,4 +9,5 @@ class user {
     send_message(){};
     join_room(){};
     leave_room(){};
+    create_room(){};
 }
