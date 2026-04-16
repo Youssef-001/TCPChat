@@ -3,9 +3,13 @@ class User {
     {
         this.username = username;
         this.password = password;
-        this.currentSocket = null;
+        this.socket = null;
     }
 
+    attach(socket)
+    {
+        this.socket=socket;
+    }
     send_message(){};
     join_room(){};
     leave_room(){};

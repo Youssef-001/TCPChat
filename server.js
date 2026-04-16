@@ -31,7 +31,10 @@ server.on('connection', (socket) => {
             let user = getUser(request.username, request.password);
             if (user) 
             {
-                createUser(user);
+               let newUser = createUser(user);
+               newUser.attach(socket);
+               users.push(newUser);
+               socket.write("Login successfully")
             }
         }
     })

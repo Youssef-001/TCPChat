@@ -41,6 +41,12 @@ const socket = net.createConnection({host: "127.0.0.1", port: 3009}, async() => 
 //   console.log(credentials);
   socket.write(JSON.stringify({type: 'login', ...credentials}));
 
+
+  socket.on('data', (data) => {
+
+    console.log(data.toString());
+  })
+
 });
 
 
