@@ -1,4 +1,4 @@
-class user {
+class User {
     constructor(username, password)
     {
         this.username = username;
@@ -11,3 +11,5 @@ class user {
     leave_room(){};
     create_room(){};
 }
+
+module.exports={User}

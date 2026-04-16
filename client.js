@@ -30,7 +30,7 @@ async function user_login() {
     const username = await rl.question("Please enter your username: ");
     const password = await rl.question("Please enter your password: ");
     // return `Username: ${username}, password: ${password}`;
-    return {'Username': username, 'Password': password};
+    return {'username': username, 'password': password};
 }
 
 

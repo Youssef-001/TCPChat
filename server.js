@@ -2,31 +2,38 @@ const net = require("node:net")
 
 const readline = require('node:readline');
 
+const {getUser} = require('./database.js')
+
 const {parseCredentials} = require("./utils.js")
+
+const {createUser} = require('./userHandler.js');
+const { create } = require("node:domain");
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 })
 
+let users = [];
+let rooms = [];
 
 const server = net.createServer();
 
- function user_login()
-{
-    rl.question("Please enter your username: ", (username) => {
-        rl.question("Please enter your password: ", (password) => {
-            console.log(`Username: ${username}, password: ${password}`);
-        })
-    });
-}
+
 
 
 server.on('connection', (socket) => {
 
     socket.on('data', (data) => {
-        // console.log(data.toString())
-        console.log(JSON.parse(data.toString()));
+        let request = JSON.parse(data.toString());
+        if (request.type == 'login')
+        {
+            let user = getUser(request.username, request.password);
+            if (user) 
+            {
+                createUser(user);
+            }
+        }
     })
 })
 
