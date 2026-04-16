@@ -14,10 +14,12 @@ let users = {
     ]
 }
 
-export function getUser(username, password)
+function getUser(username, password)
 {
-    let user = users.find((user) => user.username === username && user.password === password);
+    let user = users.users.find((user) => user.username === username && user.password === password);
     
     if (user) return user;
     else return null
 }
+
+module.exports = {getUser}
