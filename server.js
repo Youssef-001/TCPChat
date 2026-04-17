@@ -31,26 +31,7 @@ roomHandler.loadRooms(getRooms());
 server.on("connection", (socket) => {
   socket.on("data", (data) => {
     let request = JSON.parse(data.toString());
-    // if (request.type == requestType.LOGIN) {
-    //   try {
-    //     const user = userHandler.loginUser({
-    //       username: request.username,
-    //       password: request.password,
-    //       socket,
-    //     });
 
-    //     if (user)
-    //       socket.write(JSON.stringify({ type: responseType.LOGIN_SUCCESS }));
-    //   } catch (err) {
-    //     console.log("Login failed");
-    //   }
-
-    // }
-    // else if (request.type == requestType.COMMAND.LIST_ROOMS)
-    // {
-    //         console.log("List rooms command.")
-        
-    // }
     handleRequest(socket,request);
 
 

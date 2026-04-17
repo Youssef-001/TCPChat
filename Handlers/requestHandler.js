@@ -47,7 +47,7 @@ function handleListRooms(socket, request)
 
     let rooms = roomHandler.getRooms();
 
-    socket.write(rooms);
+    socket.write(JSON.stringify(rooms));
 
 }
 

@@ -1,15 +1,11 @@
 const net = require("node:net");
-const readline = require("node:readline/promises");
 const { getUser } = require("./database.js");
 
 const { commandType, requestType, responseType } = require("./constants.js");
 
 const {handleResponse} = require('./Handlers/responseHandler.js')
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+const {rl} = require('./Handlers/responseHandler.js')
 
 const clearLine = (dir) => {
   return new Promise((resolve, reject) => {
@@ -47,7 +43,8 @@ const socket = net.createConnection(
 
     socket.on("data", async (data) => {
       const response = JSON.parse(data.toString());
-      handleResponse(response);
+      handleResponse(response, socket);
+      // --- here ---
     });
   },
 );

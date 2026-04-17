@@ -1,25 +1,35 @@
 const { commandType, requestType, responseType } = require('../constants');
+const readline = require("node:readline/promises");
 
 
-async function commandLoop(socket)
-{
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
-    const command = await rl.question("Enter your command: ");
 
-    if (command === "/rooms")
-    {
-        socket.write(JSON.stringify({type: requestType.COMMAND.LIST_ROOMS}));
-    }
+async function startCommandLoop(socket) {
+        const input = await rl.question("Enter your command: ");
+        const request = {};
+
+        switch (input) {
+
+            case commandType.LIST_ROOMS:
+                request.type = commandType.LIST_ROOMS;
+
+        }
+        socket.write(JSON.stringify(request));
+    
 }
 
 
-function handleResponse(response) {
+function handleResponse(response, socket) {
 
     switch (response.type) {
 
         case responseType.LOGIN_SUCCESS:
             console.log("Login successfully");
-            await commandLoop(socket);
+             startCommandLoop(socket);
             break;
         
         case responseType.LOGIN_FAILED:
@@ -27,7 +37,7 @@ function handleResponse(response) {
             break;
         
         case responseType.ROOMS_LIST:
-            handleResponse(response)
+            handleResponse()
             break;
         
         default: 
@@ -42,4 +52,4 @@ function handleResponse(response) {
 
 }
 
-module.exports = {handleResponse}
+module.exports = {handleResponse, rl}
