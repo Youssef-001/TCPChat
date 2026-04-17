@@ -13,7 +13,13 @@ class RoomHandler {
     })
   }
 
-  createRoom(room_name) {}
+  createRoom(room_name) {
+
+    const id = crypto.randomUUID();
+
+    let newRoom = new Room(id, room_name, []);
+    this.rooms.push(newRoom);
+  }
 
   joinRoom(rooms, room_name, user) {}
 

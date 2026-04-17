@@ -8,6 +8,7 @@ const {parseCredentials} = require("./utils.js")
 
 const {createUser} = require('./userHandler.js');
 const { create } = require("node:domain");
+const {commandType, requestType } = require('./constants.js')
 
 const {RoomHandler} = require('./roomHandler.js')
 

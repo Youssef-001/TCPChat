@@ -21,12 +21,12 @@ let rooms = {
         {
             room_id: '32456',
             room_name: 'room1',
-            current_users: null
+            current_users: []
         },
         {
             room_id: '12752',
             room_name: 'room2',
-            current_users: null
+            current_users: []
         }
     ]
 }

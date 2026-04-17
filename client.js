@@ -2,6 +2,8 @@ const net = require("node:net");
 const readline = require('node:readline/promises');
 const {getUser} = require('./database.js')
 
+const {commandType, requestType } = require('./constants.js')
+
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -26,6 +28,7 @@ const rl = readline.createInterface({
     }
 
 
+
 async function user_login() {
     const username = await rl.question("Please enter your username: ");
     const password = await rl.question("Please enter your password: ");
@@ -39,7 +42,7 @@ const socket = net.createConnection({host: "127.0.0.1", port: 3009}, async() => 
 
   let credentials = await user_login();
 //   console.log(credentials);
-  socket.write(JSON.stringify({type: 'login', ...credentials}));
+  socket.write(JSON.stringify({type: requestType.LOGIN, ...credentials}));
 
 
   socket.on('data', (data) => {
