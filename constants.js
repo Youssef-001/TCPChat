@@ -12,7 +12,8 @@ const requestType = {
 
 const responseType = {
     LOGIN_SUCCESS: 'Login sucessfully',
-    LOGIN_FAILED: 'Login Failed'
+    LOGIN_FAILED: 'Login Failed',
+    ROOMS_LIST: 'Rooms List'
 }
 
 module.exports = { commandType, requestType, responseType };

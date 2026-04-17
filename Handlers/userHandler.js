@@ -47,7 +47,6 @@ class UserHandler {
                     if (us === find_user) us.attach(user.socket);
                 })
 
-
             }
 
             return user;
