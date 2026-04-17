@@ -5,6 +5,8 @@ class Room {
         this.current_users = null;
     }
 
-    user_leave(){}
     user_join(){}
+    user_leave(){}
 }
+
+module.exports = {Room}

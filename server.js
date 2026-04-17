@@ -2,12 +2,14 @@ const net = require("node:net")
 
 const readline = require('node:readline');
 
-const {getUser} = require('./database.js')
+const {getUser,getRooms} = require('./database.js')
 
 const {parseCredentials} = require("./utils.js")
 
 const {createUser} = require('./userHandler.js');
 const { create } = require("node:domain");
+
+const {RoomHandler} = require('./roomHandler.js')
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -15,11 +17,11 @@ const rl = readline.createInterface({
 })
 
 let users = [];
-let rooms = [];
 
 const server = net.createServer();
 
-
+let roomHandler = new RoomHandler();
+roomHandler.loadRooms(getRooms());
 
 
 server.on('connection', (socket) => {

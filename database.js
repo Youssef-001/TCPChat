@@ -14,6 +14,24 @@ let users = {
     ]
 }
 
+
+
+let rooms = {
+    'rooms': [
+        {
+            room_id: '32456',
+            room_name: 'room1',
+            current_users: null
+        },
+        {
+            room_id: '12752',
+            room_name: 'room2',
+            current_users: null
+        }
+    ]
+}
+
+
 function getUser(username, password)
 {
     let user = users.users.find((user) => user.username === username && user.password === password);
@@ -22,4 +40,11 @@ function getUser(username, password)
     else return null
 }
 
-module.exports = {getUser}
+function getRooms()
+{
+    return rooms.rooms;
+}
+
+
+
+module.exports = {getUser, getRooms}
