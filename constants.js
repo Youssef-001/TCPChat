@@ -10,4 +10,9 @@ const requestType = {
     COMMAND: commandType,
 }
 
-module.exports = { commandType, requestType };
+const responseType = {
+    LOGIN_SUCCESS: 'Login sucessfully',
+    LOGIN_FAILED: 'Login Failed'
+}
+
+module.exports = { commandType, requestType, responseType };

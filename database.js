@@ -40,6 +40,11 @@ function getUser(username, password)
     else return null
 }
 
+function getUsers()
+{
+    return users.users;
+}
+
 function getRooms()
 {
     return rooms.rooms;
@@ -47,4 +52,4 @@ function getRooms()
 
 
 
-module.exports = {getUser, getRooms}
+module.exports = {getUser, getRooms, getUsers}

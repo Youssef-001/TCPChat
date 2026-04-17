@@ -1,8 +1,10 @@
-const { Room } = require("./room");
+const { Room } = require("../room")
+const {getRooms} = require('../database');
 
 class RoomHandler {
   constructor() {
     this.rooms = [];
+    this.loadRooms(getRooms());
   }
 
   loadRooms(rooms)
@@ -26,6 +28,8 @@ class RoomHandler {
   findRoom(room_name) {}
 
   leaveRoom(rooms, room_name, user) {}
+
+  getRooms() {return this.rooms}
 }
 
 
