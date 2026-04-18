@@ -3,6 +3,7 @@ const readline = require("node:readline/promises");
 
 const EventEmitter = require("events");
 const stateEvents = new EventEmitter();
+const {clearLine, moveCursor} = require('../utils.js')
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -78,7 +79,7 @@ async function startCommandLoop(socket) {
   }
 }
 
-function handleResponse(response, socket) {
+async function handleResponse(response, socket) {
   switch (response.type) {
     case responseType.LOGIN_SUCCESS:
       console.log("Login successfully");
@@ -102,6 +103,13 @@ function handleResponse(response, socket) {
         `you have joined room ${response.data.room_name} successfully`,
       );
       break;
+
+    
+    case responseType.MESSAGE.CHANNEL_MESSAGE:
+        await moveCursor(0,-1)
+        console.log(`[${response.room_name}] > ${response.from}: ${response.data}`);
+        break;
+
 
     default:
       console.log(response);

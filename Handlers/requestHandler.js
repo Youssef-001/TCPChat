@@ -59,7 +59,13 @@ const requestHandlers = {
 
   [requestType.MESSAGE.CHANNEL_MESSAGE]: (socket,request) => {
     console.log(socket.room);
-    socket.room.broadcast_message(socket.user, request.data);
+    socket.room.broadcast_message({
+        type: requestType.MESSAGE.CHANNEL_MESSAGE,
+        from: socket.user.username,
+        room_name: socket.room.room_name,
+        data: request.data,
+
+    });
     console.log(request);
   }
 };

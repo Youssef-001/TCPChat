@@ -5,23 +5,10 @@ const { commandType, requestType, responseType } = require("./constants.js");
 
 const {handleResponse} = require('./Handlers/responseHandler.js')
 
+const {clearLine, moveCursor} = require('./utils.js')
+
 const {rl} = require('./Handlers/responseHandler.js')
 
-const clearLine = (dir) => {
-  return new Promise((resolve, reject) => {
-    process.stdout.clearLine(dir, () => {
-      resolve();
-    });
-  });
-};
-
-const moveCursor = (dx, dy) => {
-  return new Promise((resolve, reject) => {
-    process.stdout.moveCursor(dx, dy, () => {
-      resolve();
-    });
-  });
-};
 
 async function user_login() {
   const username = await rl.question("Please enter your username: ");
@@ -53,3 +40,5 @@ const socket = net.createConnection(
     });
   },
 );
+
+

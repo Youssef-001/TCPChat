@@ -20,6 +20,7 @@ const responseType = {
     LOGIN_FAILED: 'Login Failed',
     ROOMS_LIST: 'Rooms List',
     JOIN_ROOM_SUCCESS: "join_room_success",
+    MESSAGE: messageType,
     ERROR: 'ERROR'
 }
 
