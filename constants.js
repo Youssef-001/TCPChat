@@ -4,9 +4,14 @@ const commandType = {
     DIRECT_MESSAGE: '/dm',
 }
 
+const messageType = {
+    CHANNEL_MESSAGE: 'Channel message',
+    DM_MESSAGE: 'DM message'
+}
+
 const requestType = {
     LOGIN: 'login',
-    MESSAGE: 'message',
+    MESSAGE: messageType,
     COMMAND: commandType,
 }
 
@@ -14,6 +19,7 @@ const responseType = {
     LOGIN_SUCCESS: 'Login sucessfully',
     LOGIN_FAILED: 'Login Failed',
     ROOMS_LIST: 'Rooms List',
+    JOIN_ROOM_SUCCESS: "join_room_success",
     ERROR: 'ERROR'
 }
 

@@ -39,8 +39,14 @@ const requestHandlers = {
         const room = roomHandler.findRoom(request.data);
         let user = socket.user;
         roomHandler.joinRoom(user,room);
+
+        let obj = {type: responseType.JOIN_ROOM_SUCCESS, data: {room_name: room.room_name}}
+        socket.room = room;
+
+
+        socket.write(JSON.stringify(obj));
         
-        console.log(room);
+        // console.log(room);
     } catch (err) {
         socket.write(JSON.stringify({ 
             type: responseType.ERROR, 
@@ -49,6 +55,12 @@ const requestHandlers = {
     }
 
     
+  },
+
+  [requestType.MESSAGE.CHANNEL_MESSAGE]: (socket,request) => {
+    console.log(socket.room);
+    socket.room.broadcast_message(socket.user, request.data);
+    console.log(request);
   }
 };
 

@@ -25,7 +25,7 @@ class RoomHandler {
 
     let roomUsers = room.user_join(user);;
     console.log(roomUsers);
-  }
+}
 
 
 findRoom(room_name) {
