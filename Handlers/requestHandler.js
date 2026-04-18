@@ -78,10 +78,6 @@ function handleRequest(socket, request) {
     else {
         console.log("Unknown request type")
     }
-
-
 }
-
-
 
 module.exports = { handleRequest };

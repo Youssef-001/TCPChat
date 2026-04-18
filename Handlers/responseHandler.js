@@ -3,7 +3,7 @@ const readline = require("node:readline/promises");
 
 const EventEmitter = require("events");
 const stateEvents = new EventEmitter();
-const {clearLine, moveCursor} = require('../utils.js')
+const { clearLine, moveCursor } = require("../utils.js");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -16,25 +16,25 @@ const clientState = {
 };
 
 function waitForInput(prompt) {
-    return new Promise((resolve) => {
-        let resolved = false;
+  return new Promise((resolve) => {
+    let resolved = false;
 
-        const onStateChange = () => {
-            if (resolved) return;
-            resolved = true;
-            rl.write('\n');
-            resolve(null);
-        };
+    const onStateChange = () => {
+      if (resolved) return;
+      resolved = true;
+      rl.write("\n");
+      resolve(null);
+    };
 
-        stateEvents.once('stateChange', onStateChange);
+    stateEvents.once("stateChange", onStateChange);
 
-        rl.question(prompt).then((input) => {
-            if (resolved) return;
-            resolved = true;
-            stateEvents.removeListener('stateChange', onStateChange);
-            resolve(input);
-        });
+    rl.question(prompt).then((input) => {
+      if (resolved) return;
+      resolved = true;
+      stateEvents.removeListener("stateChange", onStateChange);
+      resolve(input);
     });
+  });
 }
 
 const commandHandlers = {
@@ -98,18 +98,20 @@ async function handleResponse(response, socket) {
     case responseType.JOIN_ROOM_SUCCESS:
       clientState.inRoom = true;
       clientState.currentRoom = response.data.room_name;
-      stateEvents.emit('stateChange');
+      stateEvents.emit("stateChange");
       console.log(
         `you have joined room ${response.data.room_name} successfully`,
       );
       break;
 
-    
     case responseType.MESSAGE.CHANNEL_MESSAGE:
-        await moveCursor(0,-1)
-        console.log(`[${response.room_name}] > ${response.from}: ${response.data}`);
-        break;
-
+      await clearLine(0);
+      await moveCursor(0, 0);
+      process.stdout.write(
+        `\r[${response.room_name}] > ${response.from}: ${response.data}\n`,
+      );
+      rl.prompt(true);
+      break;
 
     default:
       console.log(response);
