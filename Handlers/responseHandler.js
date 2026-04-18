@@ -8,18 +8,30 @@ const rl = readline.createInterface({
 });
 
 
+const commandHandlers = {
+    [commandType.LIST_ROOMS]: (socket) => {
+        socket.write(JSON.stringify({ type: commandType.LIST_ROOMS }));
+    },
+
+    
+}
+
+
 async function startCommandLoop(socket) {
         const input = await rl.question("Enter your command: ");
-        const request = {};
+        const tokens = input.split(' ');
+        if (tokens.length == 1) {
+            const handler = commandHandlers[input]
+            if (handler)
+                handler(socket);
+            else
+                console.log("Unknown command")
 
-        switch (input) {
 
-            case commandType.LIST_ROOMS:
-                request.type = commandType.LIST_ROOMS;
 
         }
-        socket.write(JSON.stringify(request));
-    
+
+           
 }
 
 

@@ -27,21 +27,24 @@ class UserHandler {
         else throw Error("User not found");
     }
 
-    authenticateUser(user)
-    {
-        let {username, password} = user;
+authenticateUser(user) {
+    const { username, password } = user;
 
-        let auth_user = this.users.find((u) => u.username===username && u.password===password);
+    const auth_user = this.users.find(
+        (u) => u.username === username && u.password === password
+    );
 
-        if (auth_user) return auth_user;
-        else return Error("User not found")
-    }
+    if (auth_user) return auth_user;
+    else throw new Error("Invalid credentials");
+}
 
     loginUser(user)
     {
 
-        try {
-            let find_user = this.authenticateUser(user);
+   
+      
+            let find_user = this.authenticateUser(user)
+
             if (find_user) {
                 this.users.map((us) => {
                     if (us === find_user) us.attach(user.socket);
@@ -50,19 +53,14 @@ class UserHandler {
             }
 
             return user;
-        }
-
-        catch(err)
-        {
-            return Error("Authentication failed");
-        }
-    }
+        
+    
 
     
 
     // createUser(){}
 
-
+        }
 }
 
 module.exports = {UserHandler};
