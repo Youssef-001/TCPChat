@@ -43,7 +43,12 @@ const socket = net.createConnection(
 
     socket.on("data", async (data) => {
       const response = JSON.parse(data.toString());
+          await moveCursor(0, 0);
+    await clearLine(0);
       handleResponse(response, socket);
+
+          rl.prompt(true);
+
       // --- here ---
     });
   },

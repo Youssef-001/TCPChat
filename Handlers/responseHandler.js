@@ -9,28 +9,40 @@ const rl = readline.createInterface({
 
 
 const commandHandlers = {
-    [commandType.LIST_ROOMS]: (socket) => {
+    [commandType.LIST_ROOMS]: (socket, data) => {
         socket.write(JSON.stringify({ type: commandType.LIST_ROOMS }));
+        return;
     },
+
+    [commandType.JOIN_ROOM] : (socket, data) => {
+        socket.write((JSON.stringify({type: commandType.JOIN_ROOM, data: data})))
+    }
+
+
 
     
 }
 
 
 async function startCommandLoop(socket) {
+    while(true){
+       process.stdout.write("\n");
         const input = await rl.question("Enter your command: ");
         const tokens = input.split(' ');
-        if (tokens.length == 1) {
-            const handler = commandHandlers[input]
+
+        let data;
+        if (tokens[0] === '/join')
+            data = tokens[1];
+            const handler = commandHandlers[tokens[0]]
             if (handler)
-                handler(socket);
+                handler(socket, data);
             else
                 console.log("Unknown command")
 
 
 
-        }
-
+        
+    }
            
 }
 

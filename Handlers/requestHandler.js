@@ -16,6 +16,7 @@ const requestHandlers = {
         password: request.password,
         socket,
       });
+      socket.user = {...user};
     } catch (err) {
       console.log(err.message);
       return;
@@ -29,8 +30,24 @@ const requestHandlers = {
 
     rooms = {'type': commandType.LIST_ROOMS, rooms: rooms};
       socket.write(JSON.stringify(rooms));
+  },
+
+  [requestType.COMMAND.JOIN_ROOM]: (socket, request) => {
 
 
+       try {
+        const room = roomHandler.findRoom(request.data);
+        let user = socket.user;
+        
+        console.log(room);
+    } catch (err) {
+        socket.write(JSON.stringify({ 
+            type: responseType.ERROR, 
+            message: err.message 
+        }));
+    }
+
+    
   }
 };
 
