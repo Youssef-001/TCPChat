@@ -5,7 +5,10 @@ class Room {
         this.current_users = [];
     }
 
-    user_join(){}
+    user_join(user){
+        this.current_users.push(user);
+        return this.current_users
+    }
     user_leave(){}
 }
 

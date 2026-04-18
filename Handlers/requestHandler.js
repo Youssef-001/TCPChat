@@ -38,6 +38,7 @@ const requestHandlers = {
        try {
         const room = roomHandler.findRoom(request.data);
         let user = socket.user;
+        roomHandler.joinRoom(user,room);
         
         console.log(room);
     } catch (err) {

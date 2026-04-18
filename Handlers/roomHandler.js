@@ -21,7 +21,12 @@ class RoomHandler {
     this.rooms.push(newRoom);
   }
 
-  joinRoom(user, room) {}
+  joinRoom(user, room) {
+
+    let roomUsers = room.user_join(user);;
+    console.log(roomUsers);
+  }
+
 
 findRoom(room_name) {
     const room = this.rooms.find((room) => room.room_name === room_name);
