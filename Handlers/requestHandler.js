@@ -8,6 +8,24 @@ const userHandler = new UserHandler();
 
 const roomHandler = new RoomHandler();
 
+
+// function censor(censor) {
+//   var i = 0;
+  
+//   return function(key, value) {
+//     if(i !== 0 && typeof(censor) === 'object' && typeof(value) == 'object' && censor == value) 
+//       return '[Circular]'; 
+    
+//     if(i >= 29) // seems to be a harded maximum of 30 serialized objects?
+//       return '[Unknown]';
+    
+//     ++i; // so we know we aren't using the original object anymore
+    
+//     return value;  
+//   }
+// }
+
+
 const requestHandlers = {
   [requestType.LOGIN]: (socket, request) => {
     try {
@@ -25,10 +43,10 @@ const requestHandlers = {
   },
 
 
-  [requestType.COMMAND.LIST_ROOMS]: (socket, request) => {
+  [requestType.LIST_ROOMS]: (socket, request) => {
       let rooms = roomHandler.getRooms();
 
-    rooms = {'type': commandType.LIST_ROOMS, rooms: rooms};
+    rooms = {type: requestType.LIST_ROOMS, rooms: roomHandler.serializeRooms(rooms)};
       socket.write(JSON.stringify(rooms));
   },
 

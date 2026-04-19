@@ -17,35 +17,57 @@ const clientState = {
 
 function waitForInput(prompt) {
   return new Promise((resolve) => {
-    let resolved = false;
+    let settled = false;
+
+    rl.setPrompt(prompt);
+    rl.prompt();
+
+    const cleanup = () => {
+      rl.removeListener("line", onLine);
+      stateEvents.removeListener("stateChange", onStateChange);
+    };
+
+    const onLine = (input) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(input.trim());
+    };
 
     const onStateChange = () => {
-      if (resolved) return;
-      resolved = true;
-      rl.write("\n");
+      if (settled) return;
+      settled = true;
+      cleanup();
+      process.stdout.write("\n");
       resolve(null);
     };
 
+    rl.once("line", onLine);
     stateEvents.once("stateChange", onStateChange);
-
-    rl.question(prompt).then((input) => {
-      if (resolved) return;
-      resolved = true;
-      stateEvents.removeListener("stateChange", onStateChange);
-      resolve(input);
-    });
   });
 }
 
-const commandHandlers = {
-  [commandType.LIST_ROOMS]: (socket, data) => {
-    socket.write(JSON.stringify({ type: commandType.LIST_ROOMS }));
-    return;
+
+const sendRequestHandler = {
+  [requestType.COMMAND.LIST_ROOMS]: (socket, data) => {
+    socket.write(JSON.stringify({ type: requestType.LIST_ROOMS }));
+    // return;
   },
 
-  [commandType.JOIN_ROOM]: (socket, data) => {
+  [requestType.COMMAND.JOIN_ROOM]: (socket, data) => {
     socket.write(JSON.stringify({ type: commandType.JOIN_ROOM, data: data }));
   },
+
+  [requestType.MESSAGE.CHANNEL_MESSAGE]: (socket, data) => {
+
+          socket.write(
+        JSON.stringify({
+          type: requestType.MESSAGE.CHANNEL_MESSAGE,
+          data,
+        }),
+      );
+
+  }
 };
 
 async function startCommandLoop(socket) {
@@ -59,21 +81,32 @@ async function startCommandLoop(socket) {
     const input = await waitForInput(prompt);
     if (input === null) continue; // state changed, re-evaluate prompt
 
-    if (clientState.inRoom && !input.startsWith("/")) {
-      socket.write(
-        JSON.stringify({
-          type: requestType.MESSAGE.CHANNEL_MESSAGE,
-          data: input,
-        }),
-      );
-      continue;
+    let isCommand = input.startsWith("/");
+    
+    let data;
+    let request_type;
+    if (isCommand) {
+      const tokens = input.split(" ");
+      if (tokens[0] === requestType.COMMAND.JOIN_ROOM) {
+        data = tokens[1];
+        request_type  = requestType.COMMAND.JOIN_ROOM;
+      }
+
+      else if (tokens[0] == requestType.LIST_ROOMS)
+      {
+        request_type = requestType.LIST_ROOMS;
+      }
     }
 
-    const tokens = input.split(" ");
-    let data;
-    if (tokens[0] === "/join") data = tokens[1];
+    else {
+        if (clientState.inRoom)
+        {
+            request_type = requestType.MESSAGE.CHANNEL_MESSAGE;
+            data = input;
+        }
+    }
 
-    const handler = commandHandlers[tokens[0]];
+    const handler = sendRequestHandler[request_type];
     if (handler) handler(socket, data);
     else console.log("Unknown command");
   }
@@ -91,8 +124,8 @@ async function handleResponse(response, socket) {
       console.log("Login failed");
       break;
 
-    case responseType.ROOMS_LIST:
-      handleResponse();
+    case responseType.LIST_ROOMS:
+      console.log(response)
       break;
 
     case responseType.JOIN_ROOM_SUCCESS:

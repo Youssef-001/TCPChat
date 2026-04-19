@@ -42,3 +42,6 @@ const socket = net.createConnection(
 );
 
 
+socket.on("error", (err) => {
+  console.error("Socket error:", err.message);
+});

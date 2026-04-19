@@ -38,6 +38,12 @@ findRoom(room_name) {
   getRooms() {
     return this.rooms;
   }
+  serializeRooms(rooms_list) {
+   
+   return rooms_list.map(({ room_id, room_name }) => ({ room_id, room_name }));
+  
+  }
 }
+
 
 module.exports = { RoomHandler };
