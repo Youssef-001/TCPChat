@@ -7,25 +7,6 @@ class Room {
     this.current_users = [];
   }
 
-  user_join(user) {
-    this.current_users.push(user);
-    return this.current_users;
-  }
-
-  user_leave(user) {
-    this.current_users.splice(this.current_users.indexOf(user), 1)
-    return this.current_users;
-  }
-
-  broadcast_message(payload) {
-    this.current_users.forEach((u) => {
-      u.socket.write(
-        JSON.stringify({
-          ...payload
-        }),
-      );
-    });
-  }
 }
 
 module.exports = { Room };

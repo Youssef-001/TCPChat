@@ -23,12 +23,26 @@ class RoomHandler {
 
   joinRoom(user, room) {
 
-    let roomUsers = room.user_join(user);
+    room.current_users.push(user);
+    return room.current_users;
 }
 
   leaveRoom(user, room) {
-    
-    let roomUsers = room.user_leave(user);
+
+    room.current_users.splice(room.current_users.indexOf(user), 1)
+    return room.current_users;
+}
+
+
+broadcast_message(room, payload)
+{
+      room.current_users.forEach((u) => {
+      u.socket.write(
+        JSON.stringify({
+          ...payload
+        }),
+      );
+    });
 }
 
 findRoom(room_name) {

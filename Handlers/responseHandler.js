@@ -83,6 +83,16 @@ const sendRequestHandler = {
       type: requestType.DM_REQUEST,
       data
     }))
+  },
+
+  [requestType.MESSAGE.DM_MESSAGE] : (socket,data) => {
+    socket.write(JSON.stringify({
+      type: requestType.MESSAGE.DM_MESSAGE,
+      data: {
+        username: data.username,
+        message: data.message
+      }
+    }))
   }
 };
 

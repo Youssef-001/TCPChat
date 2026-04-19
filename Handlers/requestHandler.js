@@ -78,7 +78,7 @@ const requestHandlers = {
 
   [requestType.MESSAGE.CHANNEL_MESSAGE]: (socket, request) => {
     console.log(socket.room);
-    socket.room.broadcast_message({
+    roomHandler.broadcast_message(socket.room, {
       type: requestType.MESSAGE.CHANNEL_MESSAGE,
       from: socket.user.username,
       room_name: socket.room.room_name,
@@ -115,6 +115,24 @@ const requestHandlers = {
       }));
     }
   },
+
+  [requestType.MESSAGE.DM_MESSAGE]: (socket,request) => {
+
+    try {
+      let destination_user = userHandler.getUser(request.data.username);
+
+
+    }
+
+    catch(err)
+    {
+      socket.write(JSON.stringify({
+        type: responseType.ERROR,
+        message: err.message,
+      }));
+    }
+
+  }
 };
 
 function handleRequest(socket, request) {
