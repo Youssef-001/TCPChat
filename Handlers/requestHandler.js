@@ -117,9 +117,12 @@ const requestHandlers = {
   },
 
   [requestType.MESSAGE.DM_MESSAGE]: (socket,request) => {
+// TODO: handle dm message request.
+
 
     try {
       let destination_user = userHandler.getUser(request.data.username);
+      userHandler.send_DM(socket.user, destination_user, request.data.message);
 
 
     }

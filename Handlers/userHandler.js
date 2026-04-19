@@ -1,5 +1,6 @@
 const {User} = require('../user');
-const {getUsers} = require('../database')
+const {getUsers} = require('../database');
+const { responseType } = require('../constants');
 
 class UserHandler {
 
@@ -54,13 +55,12 @@ authenticateUser(user) {
 
             return find_user;
         
-    
-
-    
-
-    // createUser(){}
-
         }
+
+    send_DM(sender, receiver, message)
+    {
+        receiver.socket.write(JSON.stringify({type: responseType.MESSAGE.DM_MESSAGE, data: {username: sender.username, message}}));
+    }
 }
 
 module.exports = {UserHandler};

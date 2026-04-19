@@ -200,6 +200,18 @@ async function handleResponse(response, socket) {
       rl.prompt(true);
       break;
 
+    
+    case responseType.MESSAGE.DM_MESSAGE:
+      await clearLine(0);
+      await moveCursor(0, 0);
+      process.stdout.write(
+        `\r[${response.data.username}] > ${response.data.message}\n`,
+      );
+      rl.prompt(true);
+      break;
+
+
+
       case responseType.DM_REQUEST_SUCCESS:
         clientState.inDM = true;
         clientState.DM_username = response.data;
