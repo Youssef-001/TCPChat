@@ -23,17 +23,19 @@ class RoomHandler {
 
   joinRoom(user, room) {
 
-    let roomUsers = room.user_join(user);;
-    console.log(roomUsers);
+    let roomUsers = room.user_join(user);
 }
 
+  leaveRoom(user, room) {
+    
+    let roomUsers = room.user_leave(user);
+}
 
 findRoom(room_name) {
     const room = this.rooms.find((room) => room.room_name === room_name);
     if (!room) throw new Error(`Room "${room_name}" not found`);
     return room;
 }
-  leaveRoom(room_name, user) {}
 
   getRooms() {
     return this.rooms;

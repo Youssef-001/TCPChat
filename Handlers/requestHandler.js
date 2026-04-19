@@ -85,6 +85,19 @@ const requestHandlers = {
 
     });
     console.log(request);
+  },
+
+  [requestType.LEAVE_ROOM] : (socket,request) => {
+
+    let user = socket.user;
+    let room = socket.room;
+    roomHandler.leaveRoom(user,room);
+
+    socket.write(JSON.stringify({
+      type: responseType.LEAVE_ROOM
+    }))
+
+
   }
 };
 

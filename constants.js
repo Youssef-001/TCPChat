@@ -13,7 +13,8 @@ const requestType = {
     LOGIN: 'login',
     MESSAGE: messageType,
     COMMAND: commandType,
-    LIST_ROOMS: '/rooms'
+    LIST_ROOMS: '/rooms',
+    LEAVE_ROOM: '/leave'
 }
 
 const responseType = {
@@ -22,7 +23,8 @@ const responseType = {
     LIST_ROOMS: '/rooms',
     JOIN_ROOM_SUCCESS: "join_room_success",
     MESSAGE: messageType,
-    ERROR: 'ERROR'
+    ERROR: 'ERROR',
+    LEAVE_ROOM: 'room_left_success'
 }
 
 module.exports = { commandType, requestType, responseType };

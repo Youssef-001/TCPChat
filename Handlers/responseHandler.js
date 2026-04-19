@@ -66,7 +66,13 @@ const sendRequestHandler = {
           data,
         }),
       );
+  },
 
+  [requestType.LEAVE_ROOM] : (socket,data) => {
+    socket.write(JSON.stringify({
+      type: requestType.LEAVE_ROOM,
+      data
+    }))
   }
 };
 
@@ -95,6 +101,13 @@ async function startCommandLoop(socket) {
       else if (tokens[0] == requestType.LIST_ROOMS)
       {
         request_type = requestType.LIST_ROOMS;
+      }
+
+      else if (tokens[0] == requestType.LEAVE_ROOM && clientState.inRoom)
+      {
+        request_type = requestType.LEAVE_ROOM;
+        data = clientState.currentRoom;
+
       }
     }
 
@@ -125,7 +138,7 @@ async function handleResponse(response, socket) {
       break;
 
     case responseType.LIST_ROOMS:
-      console.log(response)
+      response.rooms.forEach((room) => process.stdout.write(`\r${room.room_name}\n`))
       break;
 
     case responseType.JOIN_ROOM_SUCCESS:
@@ -135,6 +148,15 @@ async function handleResponse(response, socket) {
       console.log(
         `you have joined room ${response.data.room_name} successfully`,
       );
+      break;
+
+
+    case responseType.LEAVE_ROOM:
+      let left_room = clientState.currentRoom;
+      clientState.inRoom = false;
+      clientState.currentRoom = null;
+      stateEvents.emit("stateChange");
+      console.log(`You left ${left_room}`);
       break;
 
     case responseType.MESSAGE.CHANNEL_MESSAGE:
