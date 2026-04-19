@@ -13,6 +13,9 @@ const rl = readline.createInterface({
 const clientState = {
   inRoom: false,
   currentRoom: null,
+  inDM: false,
+  DM_username: null,
+  current_username: null
 };
 
 function waitForInput(prompt) {
@@ -73,6 +76,13 @@ const sendRequestHandler = {
       type: requestType.LEAVE_ROOM,
       data
     }))
+  },
+
+  [requestType.DM_REQUEST] : (socket,data) => {
+    socket.write(JSON.stringify({
+      type: requestType.DM_REQUEST,
+      data
+    }))
   }
 };
 
@@ -82,7 +92,7 @@ async function startCommandLoop(socket) {
 
     const prompt = clientState.inRoom
       ? `[${clientState.currentRoom}] Message: `
-      : "Enter your command: ";
+      : clientState.inDM ? `${clientState.current_username} > ${clientState.DM_username}:  ` : "Enter your command: ";
 
     const input = await waitForInput(prompt);
     if (input === null) continue; // state changed, re-evaluate prompt
@@ -109,6 +119,12 @@ async function startCommandLoop(socket) {
         data = clientState.currentRoom;
 
       }
+
+      else if (tokens[0] == requestType.DM_REQUEST)
+      {
+        request_type = requestType.DM_REQUEST;
+        data = {username: tokens[1]}
+      }
     }
 
     else {
@@ -116,6 +132,11 @@ async function startCommandLoop(socket) {
         {
             request_type = requestType.MESSAGE.CHANNEL_MESSAGE;
             data = input;
+        }
+        else if(clientState.inDM)
+        {
+          request_type = requestType.MESSAGE.DM_MESSAGE;
+          data = {username:clientState.DM_username, message: input}
         }
     }
 
@@ -128,6 +149,7 @@ async function startCommandLoop(socket) {
 async function handleResponse(response, socket) {
   switch (response.type) {
     case responseType.LOGIN_SUCCESS:
+      clientState.current_username = response.data;
       console.log("Login successfully");
 
       startCommandLoop(socket);
@@ -168,10 +190,20 @@ async function handleResponse(response, socket) {
       rl.prompt(true);
       break;
 
+      case responseType.DM_REQUEST_SUCCESS:
+        clientState.inDM = true;
+        clientState.DM_username = response.data;
+        stateEvents.emit("stateChange");
+        console.clear();
+        console.log(`Direct message to ${clientState.DM_username}`);
+        break;
+
+      
     default:
       console.log(response);
       break;
   }
+
 }
 
 function handleRoomsList(response) {
