@@ -47,11 +47,8 @@ authenticateUser(user) {
                 this.users.map((us) => {
                     if (us === find_user) us.attach(user.socket);
                 })
-
             }
-
             return find_user;
-        
         }
 
     send_DM(sender, receiver, message)

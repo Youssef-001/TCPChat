@@ -12,7 +12,7 @@ const { commandType, requestType, responseType } = require("./constants.js");
 
 const { RoomHandler } = require("./Handlers/roomHandler.js");
 const { UserHandler } = require("./Handlers/userHandler.js");
-const {handleRequest} = require('./Handlers/requestHandler.js');
+const { handleRequest } = require("./Handlers/requestHandler.js");
 const { User } = require("./user.js");
 
 const rl = readline.createInterface({
@@ -21,17 +21,15 @@ const rl = readline.createInterface({
 });
 const server = net.createServer();
 
-let roomHandler = new RoomHandler();
-let userHandler = new UserHandler();
-roomHandler.loadRooms(getRooms());
-
 server.on("connection", (socket) => {
   socket.on("data", (data) => {
     let request = JSON.parse(data.toString());
 
-    handleRequest(socket,request);
+    handleRequest(socket, request);
+  });
 
-
+  socket.on("error", (err) => {
+    console.error("Socket error:", err.message);
   });
 });
 

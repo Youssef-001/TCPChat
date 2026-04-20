@@ -19,7 +19,7 @@ const requestHandlers = {
         password: request.password,
         socket,
       });
-      socket.user = { ...user };
+      socket.user = user ;
     } catch (err) {
       console.log(err.message);
       return;
@@ -42,7 +42,6 @@ const requestHandlers = {
       const room = roomHandler.findRoom(request.data);
       let user = socket.user;
       roomHandler.joinRoom(user, room);
-// add chat history here.
       let messages = await get_last_n_messages(room.room_name, 20);
       let obj = {
         type: responseType.JOIN_ROOM_SUCCESS,
@@ -123,6 +122,16 @@ const requestHandlers = {
       }));
     }
 
+  },
+
+  [requestType.LIST_ONLINE_USERS] : (socket,request) => {
+    let payload = {type: responseType.USERS_LIST, users: []};
+    socket.room.current_users.forEach((user, index) => {
+      payload.users.push({index, username:user.username});
+    })
+
+    console.log(payload);
+    roomHandler.broadcast_message(socket.room, payload);
   }
 };
 

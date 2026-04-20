@@ -15,7 +15,8 @@ const requestType = {
     COMMAND: commandType,
     LIST_ROOMS: '/rooms',
     LEAVE_ROOM: '/leave',
-    DM_REQUEST: '/dm'
+    DM_REQUEST: '/dm',
+    LIST_ONLINE_USERS: '/users'
 
 }
 
@@ -28,7 +29,8 @@ const responseType = {
     ERROR: 'ERROR',
     LEAVE_ROOM: 'room_left_success',
     DIRECT_MESSAGE: 'direct_message',
-    DM_REQUEST_SUCCESS: 'direct_message_request_success'
+    DM_REQUEST_SUCCESS: 'direct_message_request_success',
+    USERS_LIST: 'users_list'
 }
 
 module.exports = { commandType, requestType, responseType };

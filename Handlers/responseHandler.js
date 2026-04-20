@@ -93,6 +93,13 @@ const sendRequestHandler = {
         message: data.message
       }
     }))
+  },
+
+  [requestType.LIST_ONLINE_USERS] : (socket,data ) => {
+    socket.write(JSON.stringify({
+      type: requestType.LIST_ONLINE_USERS,
+      data: {room_name: data.room_name}
+    }))
   }
 };
 
@@ -134,6 +141,12 @@ async function startCommandLoop(socket) {
       {
         request_type = requestType.DM_REQUEST;
         data = {username: tokens[1]}
+      }
+
+      else if (tokens[0] == requestType.LIST_ONLINE_USERS && clientState.inRoom)
+      {
+        request_type = requestType.LIST_ONLINE_USERS;
+        data = {room_name: clientState.currentRoom}
       }
     }
 
@@ -178,15 +191,21 @@ async function handleResponse(response, socket) {
       clientState.currentRoom = response.data.room_name;
       stateEvents.emit("stateChange");
       console.log(
-        `you have joined room ${response.data.room_name} successfully`,
+        `\x1b[34myou have joined room ${response.data.room_name} successfully\x1b[0m`,
       );
-
       if (response.data.messages.length > 0)
       {
         response.data.messages.forEach((message) => {
           console.log(`${message.username} > ${message.message}\n`)
         })
       }
+      break;
+
+
+        case responseType.USERS_LIST:
+      response.users.forEach((user, index) => {
+        process.stdout.write(`\r\x1b[32m${user.username}\x1b[0m\n`)
+      });
       break;
 
 
