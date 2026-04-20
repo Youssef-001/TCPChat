@@ -4,25 +4,11 @@ const { RoomHandler } = require("./roomHandler");
 
 const { UserHandler } = require("./userHandler");
 
+const {get_last_n_messages} = require('./fileHandler')
+
 const userHandler = new UserHandler();
 
 const roomHandler = new RoomHandler();
-
-// function censor(censor) {
-//   var i = 0;
-
-//   return function(key, value) {
-//     if(i !== 0 && typeof(censor) === 'object' && typeof(value) == 'object' && censor == value)
-//       return '[Circular]';
-
-//     if(i >= 29) // seems to be a harded maximum of 30 serialized objects?
-//       return '[Unknown]';
-
-//     ++i; // so we know we aren't using the original object anymore
-
-//     return value;
-//   }
-// }
 
 const requestHandlers = {
   [requestType.LOGIN]: (socket, request) => {
@@ -51,15 +37,18 @@ const requestHandlers = {
     socket.write(JSON.stringify(rooms));
   },
 
-  [requestType.COMMAND.JOIN_ROOM]: (socket, request) => {
+  [requestType.COMMAND.JOIN_ROOM]: async(socket, request) => {
     try {
       const room = roomHandler.findRoom(request.data);
       let user = socket.user;
       roomHandler.joinRoom(user, room);
-
+// add chat history here.
+      let messages = await get_last_n_messages(room.room_name, 20);
       let obj = {
         type: responseType.JOIN_ROOM_SUCCESS,
-        data: { room_name: room.room_name },
+        data: { room_name: room.room_name,
+          messages: messages
+         },
       };
       socket.room = room;
 
@@ -117,7 +106,6 @@ const requestHandlers = {
   },
 
   [requestType.MESSAGE.DM_MESSAGE]: (socket,request) => {
-// TODO: handle dm message request.
 
 
     try {

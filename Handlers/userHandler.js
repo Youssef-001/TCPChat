@@ -41,9 +41,6 @@ authenticateUser(user) {
 
     loginUser(user)
     {
-
-   
-      
             let find_user = this.authenticateUser(user)
 
             if (find_user) {

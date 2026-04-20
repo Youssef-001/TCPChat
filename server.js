@@ -19,9 +19,6 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
-// let users = [];
-
 const server = net.createServer();
 
 let roomHandler = new RoomHandler();

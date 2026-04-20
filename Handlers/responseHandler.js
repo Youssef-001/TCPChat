@@ -180,6 +180,13 @@ async function handleResponse(response, socket) {
       console.log(
         `you have joined room ${response.data.room_name} successfully`,
       );
+
+      if (response.data.messages.length > 0)
+      {
+        response.data.messages.forEach((message) => {
+          console.log(`${message.username} > ${message.message}\n`)
+        })
+      }
       break;
 
 
@@ -204,6 +211,7 @@ async function handleResponse(response, socket) {
     case responseType.MESSAGE.DM_MESSAGE:
       await clearLine(0);
       await moveCursor(0, 0);
+      console.log('\n')
       process.stdout.write(
         `\r[${response.data.username}] > ${response.data.message}\n`,
       );
